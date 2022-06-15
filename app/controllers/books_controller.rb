@@ -12,14 +12,35 @@ class BooksController < ApplicationController
 
   def index
     @book = Book.new
+    @books = Book.all
+    @user = current_user
   end
 
   def show
     @booknew = Book.new
-    
+    @book = Book.find(params[:id])
+    @user = @book.user
+  end
+
+  def edit
+    @book = Book.find(params[:id])
+  end
+
+  def update
+    @book = Book.find(params[:id])
+    if @book.update(book_params)
+      redirect_to book_path(@book.id)
+      flash[:notice] = "Book was successfully updated."
+    else
+      render:edit
+    end
+  
   end
 
   def destroy
+    @book = Book.find(params[:id])
+    @book.destroy
+    redirect_to books_path
   end
 
   # 投稿データのストロングパラメータ
